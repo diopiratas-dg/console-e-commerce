@@ -47,6 +47,15 @@ public class Database {
         }
     }
 
+    public void addNewStock(Stock newStock) {
+        for(int i = 0; i < stocks.length; i++) {
+            if (stocks[i] == null) {
+                stocks[i] = newStock;
+                return;
+            }
+        }
+    }
+
     public Product getProductById(String productId) {
         Product product = null;
         for (int i = 0; i < products.length; i++) {

@@ -1,6 +1,7 @@
 import database.Database;
 import models.Category;
 import models.Product;
+import models.Stock;
 
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ public class Main {
             System.out.println("3 - Cadastrar produtos");
             System.out.println("4 - Listar produtos cadastrados");
             System.out.println("5 - Criar novo estoque de produto");
-            System.out.println("6 - Realizar novo pedido de venda");
+            System.out.println("6 - Listar estoques atuais");
 
             option = scanner.nextInt();
             process(option);
@@ -26,9 +27,10 @@ public class Main {
     }
 
     public static void process(int option) {
+        Scanner scanner = new Scanner(System.in);
+
         switch(option) {
             case 1: {
-                Scanner scanner = new Scanner(System.in);
                 System.out.println("-----CADASTRANDO NOVA CATEGORIA-----");
                 System.out.print("Qual o ID da categoria?: ");
                 String id = scanner.nextLine();
@@ -57,7 +59,6 @@ public class Main {
             }
 
             case 3: {
-                Scanner scanner = new Scanner(System.in);
                 System.out.println("-----CADASTRANDO NOVO PRODUTO-----");
                 System.out.print("Qual a descrição do novo produto?: ");
                 String description = scanner.nextLine();
@@ -85,6 +86,37 @@ public class Main {
                         System.out.println("Preço: " + product.getPrice());
                         System.out.println("Categoria: " + product.getCategory().getId() + " - " + product.getCategory().getDescription());
                         System.out.println("---------------------------");
+                    }
+                }
+
+                break;
+            }
+
+            case 5: {
+                System.out.println("-----CRIANDO NOVO ESTOQUE-----");
+
+                System.out.print("Qual o código do novo estoque: ");
+                String code = scanner.nextLine();
+                System.out.print("Qual o código do produto que você deseja criar o estoque: ");
+                String productId = scanner.nextLine();
+                System.out.print("Qual a quantidade que você deseja adicionar ao estoque: ");
+                int quantity = scanner.nextInt();
+
+                Product product = db.getProductById(productId);
+
+                Stock newStock = new Stock(code, product, quantity);
+                db.addNewStock(newStock);
+                break;
+            }
+
+            case 6: {
+                System.out.println("-----LISTANDO ESTOQUES-----");
+
+                for(Stock stock: db.getStocks()) {
+                    if (stock != null) {
+                        System.out.println("Código: " + stock.getCode());
+                        System.out.println("Produto: " + stock.getProduct().getId() + " - " + stock.getProduct().getDescription());
+                        System.out.println("Quantidade disponível: " + stock.getQuantity());
                     }
                 }
 
