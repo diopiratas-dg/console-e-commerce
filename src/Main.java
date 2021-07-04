@@ -1,13 +1,20 @@
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Scanner;
+
 import database.Database;
 import models.Category;
 import models.Product;
 import models.Stock;
 
-import java.util.Scanner;
-
 public class Main {
     static Database db;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (Exception e) {
+            System.out.println("Problema conexão");
+        }
         db = new Database();
         int option;
         do {
@@ -28,7 +35,7 @@ public class Main {
 
     public static void process(int option) {
         Scanner scanner = new Scanner(System.in);
-
+        scanner.useLocale(Locale.US);
         switch(option) {
             case 1: {
                 System.out.println("-----CADASTRANDO NOVA CATEGORIA-----");
@@ -45,7 +52,7 @@ public class Main {
             case 2: {
                 System.out.println("-----LISTANDO CATEGORIAS CADASTRADAS-----");
 
-                Category[] persistedCategories = db.getCategories();
+                ArrayList<Category> persistedCategories = db.getCategories();
 
                 for(Category category : persistedCategories) {
                     if (category != null) {
@@ -62,15 +69,17 @@ public class Main {
                 System.out.println("-----CADASTRANDO NOVO PRODUTO-----");
                 System.out.print("Qual a descrição do novo produto?: ");
                 String description = scanner.nextLine();
-                System.out.print("Qual o ID do novo produto?: ");
-                String id = scanner.nextLine();
+                System.out.print("Qual o codigo do novo produto?: ");
+                String codigo = scanner.nextLine();
+                System.out.print("Qual nome do produto?: ");
+                String nomeProduto = scanner.nextLine();
                 System.out.print("Qual a categoria do novo produto (digite o ID de uma categoria cadastrada)?: ");
                 String categoryId = scanner.nextLine();
                 System.out.print("Qual o preço do novo produto?: ");
-                double price = scanner.nextDouble();
+                Double price = Double.parseDouble(scanner.nextLine());
 
-                Category category = db.getCategoryById(categoryId);
-                Product newProduct = new Product(id, description, price, category);
+                Category category = db.getCategoryById(Integer.parseInt(categoryId));
+                Product newProduct = new Product(codigo, description, price, category, nomeProduto);
 
                 db.addNewProduct(newProduct);
                 break;

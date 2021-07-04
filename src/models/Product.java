@@ -1,20 +1,30 @@
 package models;
 
 public class Product {
-    private String id;
+    private Integer id;
     private String description;
+    private String code;
     private double price;
     private Category category;
+    private String nameProduct;
 
-    public Product(String id, String description, double price, Category category) {
-        this.id = id;
+    public Product(String codigo, String description, double price, Category category, String nomeProduto) {
+        this.code = codigo;
         this.description = description;
         this.price = price;
         this.category = category;
+        this.nameProduct = nomeProduto;
     }
 
-    public String getId() {
+    public String getNameProduct() {
+        return nameProduct;
+    }
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer idProduto){
+        this.id = idProduto;
     }
 
     public String getDescription() {
@@ -23,6 +33,10 @@ public class Product {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public Category getCategory() {
